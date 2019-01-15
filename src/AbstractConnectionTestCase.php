@@ -11,8 +11,6 @@
 
 namespace phpsap\IntegrationTests;
 
-use phpsap\saprfc\SapRfcConnection;
-
 /**
  * Class \phpsap\IntegrationTests\AbstractConnectionTestCase
  *
@@ -25,17 +23,17 @@ use phpsap\saprfc\SapRfcConnection;
 abstract class AbstractConnectionTestCase extends AbstractTestCase
 {
     /**
-     * Load class mocking a successful connection attempt using \sapnwrfc.
+     * Mock the SAP RFC module for a successful connection attempt.
      */
     abstract protected function mockSuccessfulConnect();
 
     /**
-     * Run a successful connection attempt.
+     * Test a successful connection attempt using either the module or its mockup.
      */
     public function testSuccessfulConnect()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockSuccessfulConnect();
             //load a bogus config
             $config = $this->getSampleSapConfig();
@@ -54,18 +52,18 @@ abstract class AbstractConnectionTestCase extends AbstractTestCase
     }
 
     /**
-     * Load class mocking a failed connection attempt using \sapnwrfc.
+     * Mock the SAP RFC module for a failed connection attempt.
      */
     abstract protected function mockFailedConnect();
 
     /**
-     * Run a failed connection attempt.
+     * Test a failed connection attempt using either the module or its mockup.
      * @expectedException \phpsap\exceptions\ConnectionFailedException
      */
     public function testFailedConnect()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockFailedConnect();
             //load a bogus config
             $config = $this->getSampleSapConfig();
@@ -78,17 +76,18 @@ abstract class AbstractConnectionTestCase extends AbstractTestCase
     }
 
     /**
-     * Load class mocking a successful connection ping using \sapnwrfc.
+     * Mock the SAP RFC module for a successful attempt to ping a connection.
      */
     abstract protected function mockSuccessfulPing();
 
     /**
-     * Successfully ping a connection.
+     * Test a successful attempt to ping a connection using either the module or its
+     * mockup.
      */
     public function testSuccessfulPing()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockSuccessfulPing();
             //load a bogus config
             $config = $this->getSampleSapConfig();
@@ -102,22 +101,23 @@ abstract class AbstractConnectionTestCase extends AbstractTestCase
     }
 
     /**
-     * Load class mocking a failed connection ping using \sapnwrfc.
+     * Mock the SAP RFC module for a failed attempt to ping a connection.
      */
     abstract protected function mockFailedPing();
 
     /**
-     * Fail to ping a connection.
+     * Test a failed attempt to ping a connection using either the module or its
+     * mockup.
      */
     public function testFailedPing()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockFailedPing();
             //load a bogus config
             $config = $this->getSampleSapConfig();
         } else {
-            static::markTestSkipped('Cannot test a failing ping with saprfc loaded.');
+            static::markTestSkipped('Cannot test a failing ping with SAP module loaded.');
         }
         $connection = $this->newConnection($config);
         $result = $connection->ping();

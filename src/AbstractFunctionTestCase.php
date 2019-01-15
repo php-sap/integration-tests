@@ -24,8 +24,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
 {
 
     /**
-     * Mock sapnwrfc functions necessary to perform a successful SAP remote function
-     * call.
+     * Mock the SAP RFC module for a successful SAP remote function call.
      */
     abstract protected function mockSuccessfulFunctionCall();
 
@@ -35,7 +34,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     public function testSuccessfulFunctionCall()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockSuccessfulFunctionCall();
             //load a bogus config
             $config = $this->getSampleSapConfig();
@@ -50,8 +49,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     }
 
     /**
-     * Mock sapnwrfc functions necessary to perform a successful SAP remote function
-     * call.
+     * Mock the SAP RFC module for an unknown function call exception.
      */
     abstract protected function mockUnknownFunctionException();
 
@@ -63,7 +61,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     public function testUnknownFunctionException()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockUnknownFunctionException();
             //load a bogus config
             $config = $this->getSampleSapConfig();
@@ -77,8 +75,8 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     }
 
     /**
-     * Mock SAPRFC functions necessary to perform a successful SAP remote function
-     * call.
+     * Mock the SAP RFC module for a successful SAP remote function call with
+     * parameters and results.
      */
     abstract protected function mockRemoteFunctionCallWithParametersAndResults();
 
@@ -88,7 +86,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     public function testRemoteFunctionCallWithParametersAndResults()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockRemoteFunctionCallWithParametersAndResults();
             //load a bogus config
             $config = $this->getSampleSapConfig();
@@ -128,7 +126,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     }
 
     /**
-     * Mock a failed remote function call with parameters.
+     * Mock the SAP RFC module for a failed SAP remote function call with parameters.
      */
     abstract protected function mockFailedRemoteFunctionCallWithParameters();
 
@@ -140,7 +138,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     public function testFailedRemoteFunctionCallWithParameters()
     {
         if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking saprfc module functions
+            //load functions mocking SAP RFC module functions or class methods
             $this->mockFailedRemoteFunctionCallWithParameters();
             //load a bogus config
             $config = $this->getSampleSapConfig();
