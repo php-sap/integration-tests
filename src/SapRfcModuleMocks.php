@@ -1,6 +1,6 @@
 <?php
 /**
- * File src/SapRfcModuleMockseMocks.php
+ * File src/SapRfcModuleMocks.php
  *
  * Container holding mock logic for the SAP RFC module.
  *
