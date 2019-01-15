@@ -36,7 +36,6 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
         static::assertInstanceOf(IConfig::class, $config);
         static::assertInstanceOf(IConfigA::class, $config);
         static::assertInstanceOf(AbstractConfigA::class, $config);
-        static::assertInstanceOf(SapRfcConfigA::class, $config);
     }
 
     /**
@@ -53,7 +52,7 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
             'gwhost' => 'gw.example.com',
             'gwserv' => 'abc',
             'lang' => 'EN',
-            'trace' => SapRfcConfigA::TRACE_FULL
+            'trace' => IConfigA::TRACE_FULL
         ];
         $configJson = json_encode($configArr);
         $config = $this->newSapRfcConfigA($configJson);
@@ -76,7 +75,7 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
         static::assertArrayHasKey('LANG', $configSaprfc);
         static::assertSame('EN', $configSaprfc['LANG']);
         static::assertArrayHasKey('TRACE', $configSaprfc);
-        static::assertSame(SapRfcConfigA::TRACE_FULL, $configSaprfc['TRACE']);
+        static::assertSame(IConfigA::TRACE_FULL, $configSaprfc['TRACE']);
     }
 
     /**
@@ -104,7 +103,7 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
                     'gwhost' => 'gw.example.com',
                     'gwserv' => 'abc',
                     'lang' => 'EN',
-                    'trace' => SapRfcConfigA::TRACE_BRIEF
+                    'trace' => IConfigA::TRACE_BRIEF
                 ],
                 'client'
             ]

@@ -36,7 +36,6 @@ abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
         static::assertInstanceOf(IConfig::class, $config);
         static::assertInstanceOf(IConfigB::class, $config);
         static::assertInstanceOf(AbstractConfigB::class, $config);
-        static::assertInstanceOf(SapRfcConfigB::class, $config);
     }
 
     /**
@@ -52,7 +51,7 @@ abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
             'r3name' => 'system_id',
             'group' => 'logon_group',
             'lang' => 'EN',
-            'trace' => SapRfcConfigB::TRACE_VERBOSE
+            'trace' => IConfigB::TRACE_VERBOSE
         ];
         $configJson = json_encode($configArr);
         $config = $this->newSapRfcConfigB($configJson);
@@ -73,7 +72,7 @@ abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
         static::assertArrayHasKey('LANG', $configSaprfc);
         static::assertSame('EN', $configSaprfc['LANG']);
         static::assertArrayHasKey('TRACE', $configSaprfc);
-        static::assertSame(SapRfcConfigB::TRACE_VERBOSE, $configSaprfc['TRACE']);
+        static::assertSame(IConfigB::TRACE_VERBOSE, $configSaprfc['TRACE']);
     }
 
     /**
@@ -101,7 +100,7 @@ abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
                     'mshost' => 'sap.example.com',
                     'group' => 'logon_group',
                     'lang' => 'EN',
-                    'trace' => SapRfcConfigB::TRACE_OFF
+                    'trace' => IConfigB::TRACE_OFF
                 ],
                 'r3name'
             ]
