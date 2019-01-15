@@ -24,7 +24,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @var array A sample PHP/SAP configuration.
      */
-    private static $sampleSapConfig = [
+    protected static $sampleSapConfig = [
         'ashost'    => 'sap.example.com',
         'sysnr'     => '001',
         'client'    => '002',
