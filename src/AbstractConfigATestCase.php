@@ -56,26 +56,18 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
         ];
         $configJson = json_encode($configArr);
         $config = $this->newConfigA($configJson);
-        $configSaprfc = $config->generateConfig();
-        static::assertInternalType('array', $configSaprfc);
-        static::assertArrayHasKey('ASHOST', $configSaprfc);
-        static::assertSame('sap.example.com', $configSaprfc['ASHOST']);
-        static::assertArrayHasKey('SYSNR', $configSaprfc);
-        static::assertSame('000', $configSaprfc['SYSNR']);
-        static::assertArrayHasKey('CLIENT', $configSaprfc);
-        static::assertSame('01', $configSaprfc['CLIENT']);
-        static::assertArrayHasKey('USER', $configSaprfc);
-        static::assertSame('username', $configSaprfc['USER']);
-        static::assertArrayHasKey('PASSWD', $configSaprfc);
-        static::assertSame('password', $configSaprfc['PASSWD']);
-        static::assertArrayHasKey('GWHOST', $configSaprfc);
-        static::assertSame('gw.example.com', $configSaprfc['GWHOST']);
-        static::assertArrayHasKey('GWSERV', $configSaprfc);
-        static::assertSame('abc', $configSaprfc['GWSERV']);
-        static::assertArrayHasKey('LANG', $configSaprfc);
-        static::assertSame('EN', $configSaprfc['LANG']);
-        static::assertArrayHasKey('TRACE', $configSaprfc);
-        static::assertSame(IConfigA::TRACE_FULL, $configSaprfc['TRACE']);
+        $this->assertValidModuleConfig(
+            $config->generateConfig(),
+            'sap.example.com',
+            '000',
+            '01',
+            'username',
+            'password',
+            'gw.example.com',
+            'abc',
+            'EN',
+            IConfigA::TRACE_FULL
+        );
     }
 
     /**
@@ -131,4 +123,30 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
      * @return \phpsap\interfaces\IConfigA
      */
     abstract public function newConfigA($config = null);
+
+    /**
+     * Assert the actual module configuration variable.
+     * @param mixed $configSaprfc
+     * @param string $ashost
+     * @param string $sysnr
+     * @param string $client
+     * @param string $user
+     * @param string $passwd
+     * @param string $gwhost
+     * @param string $gwserv
+     * @param string $lang
+     * @param int $trace
+     */
+    abstract public function assertValidModuleConfig(
+        $configSaprfc,
+        $ashost,
+        $sysnr,
+        $client,
+        $user,
+        $passwd,
+        $gwhost,
+        $gwserv,
+        $lang,
+        $trace
+    );
 }
