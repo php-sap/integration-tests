@@ -56,24 +56,17 @@ abstract class AbstractConfigBTestCase extends TestCase
         ];
         $configJson = json_encode($configArr);
         $config = $this->newConfigB($configJson);
-        $configSaprfc = $config->generateConfig();
-        static::assertInternalType('array', $configSaprfc);
-        static::assertArrayHasKey('CLIENT', $configSaprfc);
-        static::assertSame('02', $configSaprfc['CLIENT']);
-        static::assertArrayHasKey('USER', $configSaprfc);
-        static::assertSame('username', $configSaprfc['USER']);
-        static::assertArrayHasKey('PASSWD', $configSaprfc);
-        static::assertSame('password', $configSaprfc['PASSWD']);
-        static::assertArrayHasKey('MSHOST', $configSaprfc);
-        static::assertSame('sap.example.com', $configSaprfc['MSHOST']);
-        static::assertArrayHasKey('R3NAME', $configSaprfc);
-        static::assertSame('system_id', $configSaprfc['R3NAME']);
-        static::assertArrayHasKey('GROUP', $configSaprfc);
-        static::assertSame('logon_group', $configSaprfc['GROUP']);
-        static::assertArrayHasKey('LANG', $configSaprfc);
-        static::assertSame('EN', $configSaprfc['LANG']);
-        static::assertArrayHasKey('TRACE', $configSaprfc);
-        static::assertSame(IConfigB::TRACE_VERBOSE, $configSaprfc['TRACE']);
+        $this->assertValidModuleConfig(
+            $config->generateConfig(),
+            '02',
+            'username',
+            'password',
+            'sap.example.com',
+            'system_id',
+            'logon_group',
+            'EN',
+            IConfigB::TRACE_VERBOSE
+        );
     }
 
     /**
@@ -130,4 +123,28 @@ abstract class AbstractConfigBTestCase extends TestCase
      * @return \phpsap\interfaces\IConfigB
      */
     abstract public function newConfigB($config = null);
+
+    /**
+     * Assert the actual module configuration variable.
+     * @param mixed $configSaprfc
+     * @param string $client
+     * @param string $user
+     * @param string $passwd
+     * @param string $mshost
+     * @param string $r3name
+     * @param string $group
+     * @param string $lang
+     * @param int $trace
+     */
+    abstract public function assertValidModuleConfig(
+        $configSaprfc,
+        $client,
+        $user,
+        $passwd,
+        $mshost,
+        $r3name,
+        $group,
+        $lang,
+        $trace
+    );
 }
