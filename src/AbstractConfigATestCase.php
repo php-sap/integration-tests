@@ -32,7 +32,7 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
      */
     public function testInheritance()
     {
-        $config = $this->newSapRfcConfigA();
+        $config = $this->newConfigA();
         static::assertInstanceOf(IConfig::class, $config);
         static::assertInstanceOf(IConfigA::class, $config);
         static::assertInstanceOf(AbstractConfigA::class, $config);
@@ -55,7 +55,7 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
             'trace' => IConfigA::TRACE_FULL
         ];
         $configJson = json_encode($configArr);
-        $config = $this->newSapRfcConfigA($configJson);
+        $config = $this->newConfigA($configJson);
         $configSaprfc = $config->generateConfig();
         static::assertInternalType('array', $configSaprfc);
         static::assertArrayHasKey('ASHOST', $configSaprfc);
@@ -119,7 +119,7 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
     public function testIncompleteConfig($configArr, $missing)
     {
         $configJson = json_encode($configArr);
-        $config = $this->newSapRfcConfigA($configJson);
+        $config = $this->newConfigA($configJson);
         $expectedMsg = sprintf('Missing mandatory key %s.', $missing);
         $this->setExpectedException(IncompleteConfigException::class, $expectedMsg);
         $config->generateConfig();
@@ -130,5 +130,5 @@ abstract class AbstractConfigATestCase extends \PHPUnit_Framework_TestCase
      * @param array|string|null $config PHP/SAP config JSON/array. Default: null
      * @return \phpsap\interfaces\IConfigA
      */
-    abstract public function newSapRfcConfigA($config = null);
+    abstract public function newConfigA($config = null);
 }
