@@ -10,6 +10,8 @@
  */
 namespace phpsap\IntegrationTests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class \phpsap\IntegrationTests\AbstractTestCase
  *
@@ -19,7 +21,7 @@ namespace phpsap\IntegrationTests;
  * @author  Gregor J.
  * @license MIT
  */
-abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestCase extends TestCase
 {
     /**
      * @var array A sample PHP/SAP configuration.

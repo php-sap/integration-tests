@@ -15,6 +15,7 @@ use phpsap\classes\AbstractConfigB;
 use phpsap\exceptions\IncompleteConfigException;
 use phpsap\interfaces\IConfig;
 use phpsap\interfaces\IConfigB;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class \phpsap\IntegrationTests\AbstractConfigBTestCase
@@ -25,7 +26,7 @@ use phpsap\interfaces\IConfigB;
  * @author  Gregor J.
  * @license MIT
  */
-abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractConfigBTestCase extends TestCase
 {
     /**
      * Test config type B inheritance chain.
@@ -118,7 +119,8 @@ abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
         $configJson = json_encode($configArr);
         $config = $this->newConfigB($configJson);
         $expectedMsg = sprintf('Missing mandatory key %s.', $missing);
-        $this->setExpectedException(IncompleteConfigException::class, $expectedMsg);
+        $this->expectException(IncompleteConfigException::class);
+        $this->expectExceptionMessage($expectedMsg);
         $config->generateConfig();
     }
 

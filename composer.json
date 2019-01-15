@@ -16,9 +16,9 @@
   },
   "minimum-stability": "stable",
   "require": {
-    "php": "^5.5",
+    "php": "^7.0",
     "ext-json": "*",
-    "phpunit/phpunit": "^4.8",
+    "phpunit/phpunit": "^6.5",
     "kba-team/memory-container": "^1.0",
     "phpsap/interfaces": "dev-master",
     "phpsap/common": "dev-master"
