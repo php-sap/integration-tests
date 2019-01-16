@@ -87,7 +87,6 @@ abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    'client' => '02',
                     'user' => 'username',
                     'passwd' => 'password',
                     'mshost' => 'sap.example.com',
