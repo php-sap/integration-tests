@@ -94,7 +94,7 @@ abstract class AbstractConfigBTestCase extends \PHPUnit_Framework_TestCase
                     'lang' => 'EN',
                     'trace' => IConfigB::TRACE_OFF
                 ],
-                'r3name'
+                'client'
             ]
         ];
     }
