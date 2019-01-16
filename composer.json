@@ -6,22 +6,19 @@
   "authors": [
     {
       "name": "Gregor J.",
-      "email": "gregor-j@users.noreply.github.com"
+      "email": "gregor-j@users.noreply.github.com",
+      "role": "developer"
     }
   ],
-  "support": {
-    "docs": "https://php-sap.github.io",
-    "issues": "https://github.com/php-sap/integration-tests/issues",
-    "source": "https://github.com/php-sap/integration-tests"
-  },
+  "homepage": "https://php-sap.github.io/",
   "minimum-stability": "stable",
   "require": {
     "php": "^7.0",
     "ext-json": "*",
     "phpunit/phpunit": "^6.5",
     "kba-team/memory-container": "^1.0",
-    "phpsap/interfaces": "dev-master",
-    "phpsap/common": "dev-master"
+    "php-sap/interfaces": "^1.0",
+    "php-sap/common": "^1.0"
   },
   "autoload": {
     "psr-4": {
