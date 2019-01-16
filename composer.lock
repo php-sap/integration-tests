@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "599dc08e1e489563d69137052ef93388",
+    "content-hash": "c7cc43e5bd8c2cf974d0f3afadacbcf3",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -109,30 +109,37 @@
             "time": "2019-01-11T11:24:37+00:00"
         },
         {
-            "name": "kba-team/typecast",
-            "version": "v1.0.1-stable",
+            "name": "php-sap/common",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/the-kbA-team/typecast.git",
-                "reference": "89939ad0dbf92f6ef09c48764347f473d51e8786"
+                "url": "https://github.com/php-sap/common.git",
+                "reference": "fc07039445f1ee2e2fc83bbd08a6c336ccf9ac5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/the-kbA-team/typecast/zipball/89939ad0dbf92f6ef09c48764347f473d51e8786",
-                "reference": "89939ad0dbf92f6ef09c48764347f473d51e8786",
+                "url": "https://api.github.com/repos/php-sap/common/zipball/fc07039445f1ee2e2fc83bbd08a6c336ccf9ac5f",
+                "reference": "fc07039445f1ee2e2fc83bbd08a6c336ccf9ac5f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.0"
+                "ext-json": "*",
+                "php": ">=5.5.0",
+                "php-sap/interfaces": "^1.0",
+                "psr/container": "^1.0"
             },
             "require-dev": {
-                "ext-json": "*",
+                "kba-team/typecast": "^1.0",
                 "phpunit/phpunit": "^4.8"
+            },
+            "suggest": {
+                "kba-team/typecast": "Automatically typecast the return values of a SAP remote function call when extending AbstractRemoteFunctionCall."
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "kbATeam\\TypeCast\\": "src/"
+                    "phpsap\\classes\\": "src/",
+                    "phpsap\\exceptions\\": "exceptions/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -141,11 +148,64 @@
             ],
             "authors": [
                 {
-                    "name": "Gregor J."
+                    "name": "Gregor J.",
+                    "email": "gregor-j@users.noreply.github.com",
+                    "role": "developer"
                 }
             ],
-            "description": "Typecast the values of any given data structure.",
-            "time": "2018-11-13T14:14:46+00:00"
+            "description": "Exceptions and abstract classes containing logic for PHP/SAP that is not specific to the underlying PHP module.",
+            "homepage": "https://php-sap.github.io",
+            "keywords": [
+                "PHPSAP",
+                "php-sap"
+            ],
+            "time": "2019-01-16T09:40:56+00:00"
+        },
+        {
+            "name": "php-sap/interfaces",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-sap/interfaces.git",
+                "reference": "4df96cbf6eb792463641ab55611173e7e6fd2761"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/4df96cbf6eb792463641ab55611173e7e6fd2761",
+                "reference": "4df96cbf6eb792463641ab55611173e7e6fd2761",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "conflict": {
+                "kba-team/php-sap": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpsap\\interfaces\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gregor J.",
+                    "email": "gregor-j@users.noreply.github.com",
+                    "role": "developer"
+                }
+            ],
+            "description": "Interfaces for implementing the PHP/SAP API. See https://php-sap.github.io for details.",
+            "homepage": "https://php-sap.github.io",
+            "keywords": [
+                "PHPSAP",
+                "interfaces",
+                "php-sap"
+            ],
+            "time": "2019-01-16T08:33:23+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -292,102 +352,6 @@
                 }
             ],
             "time": "2017-06-03T08:32:36+00:00"
-        },
-        {
-            "name": "phpsap/common",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-sap/common.git",
-                "reference": "aea080e5e1789154450e6f9ca41715b59180def2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/common/zipball/aea080e5e1789154450e6f9ca41715b59180def2",
-                "reference": "aea080e5e1789154450e6f9ca41715b59180def2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "kba-team/typecast": "^1.0",
-                "php": ">=5.5.0",
-                "phpsap/interfaces": "dev-master",
-                "psr/container": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "phpsap\\classes\\": "src/",
-                    "phpsap\\exceptions\\": "exceptions/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gregor J.",
-                    "email": "gregor-j@users.noreply.github.com"
-                }
-            ],
-            "description": "Exceptions and abstract classes containing logic for PHP/SAP that is not specific to the underlying PHP module.",
-            "keywords": [
-                "PHPSAP",
-                "abstract",
-                "classes",
-                "common",
-                "exceptions",
-                "php-sap"
-            ],
-            "time": "2019-01-10T14:56:38+00:00"
-        },
-        {
-            "name": "phpsap/interfaces",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-sap/interfaces.git",
-                "reference": "cf6b22e4629847f0f38b75d63f94a7b9dccbbbc7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/cf6b22e4629847f0f38b75d63f94a7b9dccbbbc7",
-                "reference": "cf6b22e4629847f0f38b75d63f94a7b9dccbbbc7",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "replace": {
-                "kba-team/php-sap": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "phpsap\\interfaces\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gregor J.",
-                    "email": "gregor-j@users.noreply.github.com"
-                }
-            ],
-            "description": "Interfaces for implementing the PHP/SAP API. See https://php-sap.github.io for details.",
-            "keywords": [
-                "PHPSAP",
-                "interfaces",
-                "php-sap"
-            ],
-            "time": "2019-01-04T09:05:14+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -1421,10 +1385,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "phpsap/interfaces": 20,
-        "phpsap/common": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
