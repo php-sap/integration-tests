@@ -95,7 +95,7 @@ abstract class AbstractConfigBTestCase extends TestCase
                     'lang' => 'EN',
                     'trace' => IConfigB::TRACE_OFF
                 ],
-                'r3name'
+                'client'
             ]
         ];
     }
