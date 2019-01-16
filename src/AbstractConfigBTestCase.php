@@ -88,7 +88,6 @@ abstract class AbstractConfigBTestCase extends TestCase
             ],
             [
                 [
-                    'client' => '02',
                     'user' => 'username',
                     'passwd' => 'password',
                     'mshost' => 'sap.example.com',
