@@ -1,5 +1,5 @@
 {
-  "name": "phpsap/integration-tests",
+  "name": "php-sap/integration-tests",
   "description": "PHP/SAP integration tests.",
   "type": "library",
   "license": "MIT",
