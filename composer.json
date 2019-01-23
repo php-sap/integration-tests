@@ -18,7 +18,7 @@
     "phpunit/phpunit": "^4.8",
     "kba-team/memory-container": "^1.0",
     "php-sap/interfaces": "^1.0",
-    "php-sap/common": "^2.0"
+    "php-sap/common": "dev-master"
   },
   "autoload": {
     "psr-4": {
