@@ -109,7 +109,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
             'EV_MONTH' => '11',
             'EV_MONTH_LAST_DAY' => '20181130',
             'EV_MONTXT' => 'Montag',
-            'EV_TIMESTAMP' => 'NOVALUE',
+            'EV_TIMESTAMP' => '20181119000000',
             'EV_WEEK' => '201847',
             'EV_WEEK_LAST' => '201846',
             'EV_WEEK_NEXT' => '201848',
@@ -119,7 +119,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
         foreach ($expected as $name => $value) {
             static::assertArrayHasKey($name, $result);
             if ($name === 'EV_TIMESTAMP') {
-                continue;
+                $result[$name] = substr($result[$name], 0, 8).'000000';
             }
             static::assertSame($value, $result[$name]);
         }
