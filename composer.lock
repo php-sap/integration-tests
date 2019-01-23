@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08cfe5987ea700c86397ddf73f8f74bc",
+    "content-hash": "d8c5de01540c1aaf519e2b7b02c7cae2",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -110,7 +110,7 @@
         },
         {
             "name": "php-sap/common",
-            "version": "dev-master",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/common.git",
@@ -1384,9 +1384,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "php-sap/common": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
