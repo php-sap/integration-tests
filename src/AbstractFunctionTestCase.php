@@ -11,6 +11,8 @@
 
 namespace phpsap\IntegrationTests;
 
+use phpsap\DateTime\SapDateTime;
+
 /**
  * Class \phpsap\IntegrationTests\AbstractFunctionTestCase
  *
@@ -99,29 +101,39 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
         $function->setParam('IV_DATE', '20181119');
         $result = $function->invoke();
         $expected = [
-            'EV_FRIDAY' => '20181123',
-            'EV_FRIDAY_LAST' => '20181116',
-            'EV_FRIDAY_NEXT' => '20181130',
+            'EV_FRIDAY' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181123'),
+            'EV_FRIDAY_LAST' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181116'),
+            'EV_FRIDAY_NEXT' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181130'),
             'EV_FRITXT' => 'Freitag',
-            'EV_MONDAY' => '20181119',
-            'EV_MONDAY_LAST' => '20181112',
-            'EV_MONDAY_NEXT' => '20181126',
-            'EV_MONTH' => '11',
-            'EV_MONTH_LAST_DAY' => '20181130',
+            'EV_MONDAY' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181119'),
+            'EV_MONDAY_LAST' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181112'),
+            'EV_MONDAY_NEXT' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181126'),
+            'EV_MONTH' => 11,
+            'EV_MONTH_LAST_DAY' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181130'),
             'EV_MONTXT' => 'Montag',
             'EV_TIMESTAMP' => '20181119000000',
-            'EV_WEEK' => '201847',
-            'EV_WEEK_LAST' => '201846',
-            'EV_WEEK_NEXT' => '201848',
-            'EV_YEAR' => '2018'
+            'EV_WEEK' => 201847,
+            'EV_WEEK_LAST' => 201846,
+            'EV_WEEK_NEXT' => 201848,
+            'EV_YEAR' => 2018
         ];
         static::assertInternalType('array', $result);
         foreach ($expected as $name => $value) {
             static::assertArrayHasKey($name, $result);
-            if ($name === 'EV_TIMESTAMP') {
-                $result[$name] = substr($result[$name], 0, 8).'000000';
+            if (is_object($value)) {
+                static::assertInstanceOf('DateTime', $result[$name]);
+                static::assertSame($value->format('Y-m-d'), $result[$name]->format('Y-m-d'));
+            } else {
+                if ($name === 'EV_TIMESTAMP') {
+                    $result[$name] = substr($result[$name], 0, 8).'000000';
+                }
+                static::assertSame($value, $result[$name], sprintf(
+                    'Assertion of field %s failed! Expected value is %s, actual value is %s.',
+                    $name,
+                    is_object($value) ? 'instance of '.get_class($value) : gettype($value),
+                    is_object($result[$name]) ? 'instance of '.get_class($result[$name]) : gettype($result[$name])
+                ));
             }
-            static::assertSame($value, $result[$name]);
         }
     }
 
