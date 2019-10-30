@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8c5de01540c1aaf519e2b7b02c7cae2",
+    "content-hash": "60fd66b9afb49a0a99fdfba3e0b8defd",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -110,22 +110,22 @@
         },
         {
             "name": "php-sap/common",
-            "version": "v2.1.0",
+            "version": "v3.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/common.git",
-                "reference": "b8c44683143fd4d122ef6928a49304b7d692f431"
+                "reference": "0357478f198a7ad8224bcaa6503289a0eaed3bf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/common/zipball/b8c44683143fd4d122ef6928a49304b7d692f431",
-                "reference": "b8c44683143fd4d122ef6928a49304b7d692f431",
+                "url": "https://api.github.com/repos/php-sap/common/zipball/0357478f198a7ad8224bcaa6503289a0eaed3bf6",
+                "reference": "0357478f198a7ad8224bcaa6503289a0eaed3bf6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": ">=5.5.0",
-                "php-sap/interfaces": "^1.0",
+                "php-sap/interfaces": "v2.x-dev",
                 "psr/container": "^1.0"
             },
             "require-dev": {
@@ -158,23 +158,24 @@
                 "PHPSAP",
                 "php-sap"
             ],
-            "time": "2019-01-23T11:06:58+00:00"
+            "time": "2019-10-29T15:51:06+00:00"
         },
         {
             "name": "php-sap/interfaces",
-            "version": "v1.0.1",
+            "version": "v2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
-                "reference": "ebea601d3408786aa9c29a151547443ace0bac00"
+                "reference": "a1ebdfce972dab48410014d11d426ea850784890"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/ebea601d3408786aa9c29a151547443ace0bac00",
-                "reference": "ebea601d3408786aa9c29a151547443ace0bac00",
+                "url": "https://api.github.com/repos/php-sap/interfaces/zipball/a1ebdfce972dab48410014d11d426ea850784890",
+                "reference": "a1ebdfce972dab48410014d11d426ea850784890",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
                 "php": ">=5.5.0"
             },
             "conflict": {
@@ -204,7 +205,7 @@
                 "interfaces",
                 "php-sap"
             ],
-            "time": "2019-04-01T14:06:33+00:00"
+            "time": "2019-10-29T15:33:14+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -1384,7 +1385,10 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "php-sap/interfaces": 20,
+        "php-sap/common": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

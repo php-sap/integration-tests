@@ -17,8 +17,8 @@
     "ext-json": "*",
     "phpunit/phpunit": "^4.8",
     "kba-team/memory-container": "^1.0",
-    "php-sap/interfaces": "^1.0",
-    "php-sap/common": "^2.0"
+    "php-sap/interfaces": "v2.x-dev",
+    "php-sap/common": "v3.x-dev"
   },
   "autoload": {
     "psr-4": {
