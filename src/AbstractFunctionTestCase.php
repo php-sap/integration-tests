@@ -96,45 +96,99 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
             //load a valid config
             $config = $this->getSapConfig();
         }
-        $connection = $this->newConnection($config);
-        $function = $connection->prepareFunction('Z_MC_GET_DATE_TIME');
-        $function->setParam('IV_DATE', '20181119');
-        $result = $function->invoke();
-        $expected = [
-            'EV_FRIDAY' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181123'),
-            'EV_FRIDAY_LAST' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181116'),
-            'EV_FRIDAY_NEXT' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181130'),
-            'EV_FRITXT' => 'Freitag',
-            'EV_MONDAY' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181119'),
-            'EV_MONDAY_LAST' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181112'),
-            'EV_MONDAY_NEXT' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181126'),
-            'EV_MONTH' => 11,
-            'EV_MONTH_LAST_DAY' => SapDateTime::createFromFormat(SapDateTime::SAP_DATE, '20181130'),
-            'EV_MONTXT' => 'Montag',
-            'EV_TIMESTAMP' => '20181119000000',
-            'EV_WEEK' => 201847,
-            'EV_WEEK_LAST' => 201846,
-            'EV_WEEK_NEXT' => 201848,
-            'EV_YEAR' => 2018
+        //prepare a DateTime object for testing SAP date and time.
+        $testDateTime = new \DateTime('2019-10-30 10:20:30');
+        //prepare function call parameter
+        $test_in = [
+            'RFCFLOAT' => 70.11,
+            'RFCCHAR1' => 'A',
+            'RFCINT2' => 5920,
+            'RFCINT1' => 163,
+            'RFCCHAR4' => 'QqMh',
+            'RFCINT4' => 416639,
+            'RFCHEX3' => '53', //=S
+            'RFCCHAR2' => 'XC',
+            'RFCTIME' => $testDateTime->format(SapDateTime::SAP_TIME),
+            'RFCDATE' => $testDateTime->format(SapDateTime::SAP_DATE),
+            'RFCDATA1' => 'qKWjmNfad32rfS9Z',
+            'RFCDATA2' => 'xi82ph2zJ8BCVtlR'
         ];
+        //remote function call
+        $result = $this->newConnection($config)
+            ->prepareFunction('RFC_WALK_THRU_TEST')
+            ->setParam('TEST_IN', $test_in)
+            ->setParam('DESTINATIONS', [
+                ['RFCDEST' => 'AOP3']
+            ])
+            ->invoke();
+        //assert basics
         static::assertInternalType('array', $result);
-        foreach ($expected as $name => $value) {
-            static::assertArrayHasKey($name, $result);
-            if (is_object($value)) {
-                static::assertInstanceOf('DateTime', $result[$name]);
-                static::assertSame($value->format('Y-m-d'), $result[$name]->format('Y-m-d'));
+        static::assertArrayHasKey('TEST_OUT', $result);
+        //create a link for programmer's convenience ...
+        $test_out = &$result['TEST_OUT'];
+        foreach ($test_in as $key => $value) {
+            /**
+             * Assert the existence of the key from test IN in test OUT.
+             */
+            static::assertArrayHasKey($key, $test_out, sprintf(
+                'Missing key %s in TEST_OUT!',
+                $key
+            ));
+            if ($key === 'RFCTIME') {
+                /**
+                 * Assert DateTime objects.
+                 */
+                static::assertInstanceOf(\DateTime::class, $test_out[$key], sprintf(
+                    'Test OUT of key %s is not DateTime!',
+                    $key
+                ));
+                //compare only time
+                $format = 'H:i:s';
+                static::assertSame($testDateTime->format($format), $test_out[$key]->format($format));
+            }
+            elseif ($key === 'RFCDATE') {
+                /**
+                 * Assert DateTime objects.
+                 */
+                static::assertInstanceOf(\DateTime::class, $test_out[$key], sprintf(
+                    'Test OUT of key %s is not DateTime!',
+                    $key
+                ));
+                //compare only date
+                $format = 'Y-m-d';
+                static::assertSame($testDateTime->format($format), $test_out[$key]->format($format));
+            } elseif ($key === 'RFCHEX3') {
+                /**
+                 * Assert simple values.
+                 */
+                static::assertSame(hex2bin($value), $test_out[$key], sprintf(
+                    'Test IN and OUT of HEX-key %s don\'t match!',
+                    $key
+                ));
             } else {
-                if ($name === 'EV_TIMESTAMP') {
-                    $result[$name] = substr($result[$name], 0, 8).'000000';
-                }
-                static::assertSame($value, $result[$name], sprintf(
-                    'Assertion of field %s failed! Expected value is %s, actual value is %s.',
-                    $name,
-                    is_object($value) ? 'instance of '.get_class($value) : gettype($value),
-                    is_object($result[$name]) ? 'instance of '.get_class($result[$name]) : gettype($result[$name])
+                /**
+                 * Assert simple values.
+                 */
+                static::assertSame($value, $test_out[$key], sprintf(
+                    'Test IN and OUT of key %s don\'t match!',
+                    $key
                 ));
             }
         }
+        /**
+         * Assert empty table parameter 'DESTINATIONS'.
+         */
+        static::assertArrayHasKey('DESTINATIONS', $result);
+        static::assertEmpty($result['DESTINATIONS']);
+        /**
+         * Assert return table 'LOG' and that RFCDEST is the same as in the
+         * 'DESTINATIONS' table parameter.
+         */
+        static::assertArrayHasKey('LOG', $result);
+        static::assertArrayHasKey(0, $result['LOG']);
+        static::assertInternalType('array', $result['LOG'][0]);
+        static::assertArrayHasKey('RFCDEST', $result['LOG'][0]);
+        static::assertSame('AOP3', $result['LOG'][0]['RFCDEST']);
     }
 
     /**
@@ -145,7 +199,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
     /**
      * Test a failed remote function call with parameters.
      * @expectedException \phpsap\exceptions\FunctionCallException
-     * @expectedExceptionMessageRegExp "^Function call Z_MC_GET_DATE_TIME failed: .*"
+     * @expectedExceptionMessageRegExp "^Function call RFC_READ_TABLE failed: .*"
      */
     public function testFailedRemoteFunctionCallWithParameters()
     {
@@ -159,8 +213,8 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
             $config = $this->getSapConfig();
         }
         $connection = $this->newConnection($config);
-        $function = $connection->prepareFunction('Z_MC_GET_DATE_TIME');
-        $function->setParam('IV_DATE', '2018-11-19');
+        $function = $connection->prepareFunction('RFC_READ_TABLE');
+        $function->setParam('QUERY_TABLE', '&');
         $function->invoke();
     }
 }
