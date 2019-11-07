@@ -140,7 +140,7 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
         static::assertArrayHasKey('RFCINT1', $test_out, 'Missing RFCINT1 in TEST_OUT!');
         static::assertSame(163, $test_out['RFCINT1'], 'Test IN and OUT of RFCINT1 don\'t match!');
         static::assertArrayHasKey('RFCINT2', $test_out, 'Missing RFCINT2 in TEST_OUT!');
-        static::assertSame(5920, $test_out['RFCINT2'], 'Test IN and OUT of RFCINT2 don\'t match!');
+        static::assertSame(4095, $test_out['RFCINT2'], 'Test IN and OUT of RFCINT2 don\'t match!');
         static::assertArrayHasKey('RFCINT4', $test_out, 'Missing RFCINT4 in TEST_OUT!');
         static::assertSame(416639, $test_out['RFCINT4'], 'Test IN and OUT of RFCINT4 don\'t match!');
         /**
