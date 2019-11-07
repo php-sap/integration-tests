@@ -207,9 +207,12 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
             //load a valid config
             $config = $this->getSapConfig();
         }
-        $connection = $this->newConnection($config);
-        $function = $connection->prepareFunction('RFC_READ_TABLE');
-        $function->setParam('QUERY_TABLE', '&');
-        $function->invoke();
+        //try to invoke a function call using an invalid parameter value
+        $jsonFile = __DIR__ . DIRECTORY_SEPARATOR . 'RFC_READ_TABLE.json';
+        $this->newConnection($config)
+            ->prepareFunction('RFC_READ_TABLE')
+            ->setApi(new RemoteApi(file_get_contents($jsonFile)))
+            ->setParam('QUERY_TABLE', '&')
+            ->invoke();
     }
 }
