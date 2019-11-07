@@ -1,0 +1,84 @@
+[
+    {
+        "type": "string",
+        "name": "DELIMITER",
+        "direction": "input",
+        "optional": true
+    },
+    {
+        "type": "string",
+        "name": "NO_DATA",
+        "direction": "input",
+        "optional": true
+    },
+    {
+        "type": "string",
+        "name": "QUERY_TABLE",
+        "direction": "input",
+        "optional": false
+    },
+    {
+        "type": "int",
+        "name": "ROWCOUNT",
+        "direction": "input",
+        "optional": true
+    },
+    {
+        "type": "int",
+        "name": "ROWSKIPS",
+        "direction": "input",
+        "optional": true
+    },
+    {
+        "type": "array",
+        "name": "DATA",
+        "direction": "table",
+        "optional": false,
+        "members": [
+            {
+                "type": "string",
+                "name": "WA"
+            }
+        ]
+    },
+    {
+        "type": "array",
+        "name": "FIELDS",
+        "direction": "table",
+        "optional": false,
+        "members": [
+            {
+                "type": "string",
+                "name": "FIELDNAME"
+            },
+            {
+                "type": "int",
+                "name": "OFFSET"
+            },
+            {
+                "type": "int",
+                "name": "LENGTH"
+            },
+            {
+                "type": "string",
+                "name": "TYPE"
+            },
+            {
+                "type": "string",
+                "name": "FIELDTEXT"
+            }
+        ]
+    },
+    {
+        "type": "array",
+        "name": "OPTIONS",
+        "direction": "table",
+        "optional": false,
+        "members": [
+            {
+                "type": "string",
+                "name": "TEXT"
+            }
+        ]
+    }
+]
