@@ -11,6 +11,7 @@
 
 namespace phpsap\IntegrationTests;
 
+use phpsap\classes\RemoteApi;
 use phpsap\DateTime\SapDateTime;
 
 /**
@@ -114,8 +115,10 @@ abstract class AbstractFunctionTestCase extends AbstractTestCase
             'RFCDATA2' => 'xi82ph2zJ8BCVtlR'
         ];
         //remote function call
+        $jsonFile = __DIR__ . DIRECTORY_SEPARATOR . 'RFC_WALK_THRU_TEST.json';
         $result = $this->newConnection($config)
             ->prepareFunction('RFC_WALK_THRU_TEST')
+            ->setApi(new RemoteApi(file_get_contents($jsonFile)))
             ->setParam('TEST_IN', $test_in)
             ->setParam('DESTINATIONS', [
                 ['RFCDEST' => 'AOP3']

@@ -1,0 +1,146 @@
+[
+    {
+        "type": "array",
+        "name": "TEST_OUT",
+        "direction": "output",
+        "optional": false,
+        "members": [
+            {
+                "type": "float",
+                "name": "RFCFLOAT"
+            },
+            {
+                "type": "string",
+                "name": "RFCCHAR1"
+            },
+            {
+                "type": "int",
+                "name": "RFCINT2"
+            },
+            {
+                "type": "int",
+                "name": "RFCINT1"
+            },
+            {
+                "type": "string",
+                "name": "RFCCHAR4"
+            },
+            {
+                "type": "int",
+                "name": "RFCINT4"
+            },
+            {
+                "type": "hexbin",
+                "name": "RFCHEX3"
+            },
+            {
+                "type": "string",
+                "name": "RFCCHAR2"
+            },
+            {
+                "type": "time",
+                "name": "RFCTIME"
+            },
+            {
+                "type": "date",
+                "name": "RFCDATE"
+            },
+            {
+                "type": "string",
+                "name": "RFCDATA1"
+            },
+            {
+                "type": "string",
+                "name": "RFCDATA2"
+            }
+        ]
+    },
+    {
+        "type": "array",
+        "name": "TEST_IN",
+        "direction": "input",
+        "optional": false,
+        "members": [
+            {
+                "type": "float",
+                "name": "RFCFLOAT"
+            },
+            {
+                "type": "string",
+                "name": "RFCCHAR1"
+            },
+            {
+                "type": "int",
+                "name": "RFCINT2"
+            },
+            {
+                "type": "int",
+                "name": "RFCINT1"
+            },
+            {
+                "type": "string",
+                "name": "RFCCHAR4"
+            },
+            {
+                "type": "int",
+                "name": "RFCINT4"
+            },
+            {
+                "type": "hexbin",
+                "name": "RFCHEX3"
+            },
+            {
+                "type": "string",
+                "name": "RFCCHAR2"
+            },
+            {
+                "type": "time",
+                "name": "RFCTIME"
+            },
+            {
+                "type": "date",
+                "name": "RFCDATE"
+            },
+            {
+                "type": "string",
+                "name": "RFCDATA1"
+            },
+            {
+                "type": "string",
+                "name": "RFCDATA2"
+            }
+        ]
+    },
+    {
+        "type": "array",
+        "name": "DESTINATIONS",
+        "direction": "table",
+        "optional": false,
+        "members": [
+            {
+                "type": "string",
+                "name": "RFCDEST"
+            }
+        ]
+    },
+    {
+        "type": "array",
+        "name": "LOG",
+        "direction": "table",
+        "optional": false,
+        "members": [
+            {
+                "type": "string",
+                "name": "RFCDEST"
+            },
+            {
+                "type": "string",
+                "name": "RFCWHOAMI"
+            },
+            {
+                "type": "string",
+                "name": "RFCLOG"
+            }
+        ]
+    }
+]
