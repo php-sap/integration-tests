@@ -1,15 +1,9 @@
 <?php
-/**
- * File src/AbstractConnectionTestCase.php
- *
- * Test connection class.
- *
- * @package integration-tests
- * @author  Gregor J.
- * @license MIT
- */
 
 namespace phpsap\IntegrationTests;
+
+use phpsap\classes\Config\ConfigTypeA;
+use phpsap\interfaces\IFunction;
 
 /**
  * Class \phpsap\IntegrationTests\AbstractConnectionTestCase
@@ -41,86 +35,45 @@ abstract class AbstractConnectionTestCase extends AbstractTestCase
             //load a valid config
             $config = $this->getSapConfig();
         }
-        $connection = $this->newConnection($config);
-        static::assertFalse($connection->isConnected());
-        $connection->connect();
-        static::assertTrue($connection->isConnected());
-        $connection->connect();
-        static::assertTrue($connection->isConnected());
-        $connection->close();
-        static::assertFalse($connection->isConnected());
+        $rfc_ping = $this->newConnection($config)
+            ->prepareFunction('RFC_PING');
+        static::assertInstanceOf(IFunction::class, $rfc_ping);
     }
 
     /**
      * Mock the SAP RFC module for a failed connection attempt.
      */
-    abstract protected function mockFailedConnect();
+    abstract protected function mockConnectionFailed();
 
     /**
      * Test a failed connection attempt using either the module or its mockup.
      * @expectedException \phpsap\exceptions\ConnectionFailedException
      */
-    public function testFailedConnect()
+    public function testConnectionFailed()
     {
         if (!extension_loaded($this->getModuleName())) {
             //load functions mocking SAP RFC module functions or class methods
-            $this->mockFailedConnect();
+            $this->mockConnectionFailed();
             //load a bogus config
             $config = $this->getSampleSapConfig();
         } else {
-            //load an invalid config
+            //load a complete but invalid config
             $config = $this->getSampleSapConfig();
         }
-        $connection = $this->newConnection($config);
-        $connection->connect();
+        $rfc_ping = $this->newConnection($config)
+            ->prepareFunction('RFC_PING');
     }
 
     /**
-     * Mock the SAP RFC module for a successful attempt to ping a connection.
+     * Test a failed connection attempt using either the module or its mockup.
+     * @expectedException \phpsap\exceptions\IncompleteConfigException
      */
-    abstract protected function mockSuccessfulPing();
-
-    /**
-     * Test a successful attempt to ping a connection using either the module or its
-     * mockup.
-     */
-    public function testSuccessfulPing()
+    public function testConfigIncomplete()
     {
-        if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking SAP RFC module functions or class methods
-            $this->mockSuccessfulPing();
-            //load a bogus config
-            $config = $this->getSampleSapConfig();
-        } else {
-            //load a valid config
-            $config = $this->getSapConfig();
-        }
-        $connection = $this->newConnection($config);
-        $result = $connection->ping();
-        static::assertTrue($result);
-    }
-
-    /**
-     * Mock the SAP RFC module for a failed attempt to ping a connection.
-     */
-    abstract protected function mockFailedPing();
-
-    /**
-     * Test a failed attempt to ping a connection using either the module or its
-     * mockup.
-     */
-    public function testFailedPing()
-    {
-        if (!extension_loaded($this->getModuleName())) {
-            //load functions mocking SAP RFC module functions or class methods
-            $this->mockFailedPing();
-            //load a bogus config
-            $config = $this->getSampleSapConfig();
-        } else {
-            static::markTestSkipped('Cannot test a failing ping with SAP module loaded.');
-        }
-        $connection = $this->newConnection($config);
-        $result = $connection->ping();
-        static::assertFalse($result);
+        /**
+         * Connection with empty configuration will be considered incomplete.
+         */
+        $rfc_ping = $this->newConnection()
+            ->prepareFunction('RFC_PING');
     }
 }
