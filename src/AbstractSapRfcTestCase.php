@@ -132,6 +132,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
     public static function provideIncompleteConfig()
     {
         return [
+            [null],
             [new ConfigTypeA()],
             [new ConfigTypeA([
                 ConfigTypeA::JSON_CLIENT => '001',
