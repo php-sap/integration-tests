@@ -78,7 +78,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             'user'   => 'username',
             'passwd' => 'password'
         ]), static::getApi('RFC_PING'));
-        static::assertInstanceOf(IConnection::class, $saprfc);
+        static::assertInstanceOf(IFunction::class, $saprfc);
         /**
          * @var IConfigTypeB $cfg
          */
@@ -262,6 +262,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         //remote function call
         $result = static::newSapRfc('RFC_WALK_THRU_TEST')
             ->setApi(static::getApi('RFC_WALK_THRU_TEST'))
+            ->setConfiguration($config)
             ->setParam('TEST_IN', $test_in)
             ->setParam('DESTINATIONS', [
                 ['RFCDEST' => 'AOP3']
@@ -352,6 +353,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         }
         static::newSapRfc('RFC_READ_TABLE')
             ->setApi(static::getApi('RFC_READ_TABLE'))
+            ->setConfiguration($config)
             ->setParam('QUERY_TABLE', '&')
             ->invoke();
     }
