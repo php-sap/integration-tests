@@ -180,6 +180,11 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
                 ConfigTypeA::JSON_CLIENT => '001',
                 ConfigTypeA::JSON_USER   => 'username',
                 ConfigTypeA::JSON_PASSWD => 'password'
+            ])],
+            [new ConfigTypeB([
+                ConfigTypeB::JSON_MSHOST => 'mshost.example.com',
+                ConfigTypeB::JSON_LANG => 'DE',
+                ConfigTypeB::JSON_TRACE => ConfigTypeB::TRACE_FULL
             ])]
         ];
     }
@@ -262,7 +267,6 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         ];
         //remote function call
         $result = static::newSapRfc('RFC_WALK_THRU_TEST')
-            ->setApi(static::getApi('RFC_WALK_THRU_TEST'))
             ->setConfiguration($config)
             ->setParam('TEST_IN', $test_in)
             ->setParam('DESTINATIONS', [
@@ -353,7 +357,6 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             $config = static::getActualSapConfig();
         }
         static::newSapRfc('RFC_READ_TABLE')
-            ->setApi(static::getApi('RFC_READ_TABLE'))
             ->setConfiguration($config)
             ->setParam('QUERY_TABLE', '&')
             ->invoke();
