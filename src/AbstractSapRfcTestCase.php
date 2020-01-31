@@ -260,6 +260,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         //remote function call
         $result = static::newSapRfc('RFC_WALK_THRU_TEST')
             ->setConfiguration($config)
+            ->setApi(static::getApi('RFC_WALK_THRU_TEST'))
             ->setParam('TEST_IN', $test_in)
             ->setParam('DESTINATIONS', [
                 ['RFCDEST' => 'AOP3']
@@ -289,27 +290,15 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
          */
         static::assertArrayHasKey('RFCTIME', $test_out, 'Missing RFCTIME in TEST_OUT!');
         static::assertArrayHasKey('RFCDATE', $test_out, 'Missing RFCDATE in TEST_OUT!');
-        static::assertArrayHasKey('RFCHEX3', $test_out, 'Missing RFCHEX3 in TEST_OUT!');
+        static::assertInstanceOf(\DateTime::class, $test_out['RFCTIME'], 'Test OUT of RFCTIME is not DateTime!');
+        static::assertSame($testDateTime->format('H:i:s'), $test_out['RFCTIME']->format('H:i:s'));
+        static::assertInstanceOf(\DateTime::class, $test_out['RFCDATE'], 'Test OUT of RFCDATE is not DateTime!');
+        static::assertSame($testDateTime->format('Y-m-d'), $test_out['RFCDATE']->format('Y-m-d'));
         /**
-         * Assertions based on the capabilities of the underlying module.
+         * Assert hexadecimal value.
          */
-        if (is_string($test_out['RFCTIME'])) {
-            static::assertSame('102030', $test_out['RFCTIME']);
-            static::assertSame('20191030', $test_out['RFCDATE']);
-            /**
-             * Assert hexadecimal value.
-             */
-            static::assertSame('53', $test_out['RFCHEX3'], 'Test IN and OUT of RFCHEX3 don\'t match!');
-        } else {
-            static::assertInstanceOf(\DateTime::class, $test_out['RFCTIME'], 'Test OUT of RFCTIME is not DateTime!');
-            static::assertSame($testDateTime->format('H:i:s'), $test_out['RFCTIME']->format('H:i:s'));
-            static::assertInstanceOf(\DateTime::class, $test_out['RFCDATE'], 'Test OUT of RFCDATE is not DateTime!');
-            static::assertSame($testDateTime->format('Y-m-d'), $test_out['RFCDATE']->format('Y-m-d'));
-            /**
-             * Assert hexadecimal value.
-             */
-            static::assertSame('S', $test_out['RFCHEX3'], 'Test IN and OUT of RFCHEX3 don\'t match!');
-        }
+        static::assertArrayHasKey('RFCHEX3', $test_out, 'Missing RFCHEX3 in TEST_OUT!');
+        static::assertSame('S', $test_out['RFCHEX3'], 'Test IN and OUT of RFCHEX3 don\'t match!');
         /**
          * Assert string values.
          */
