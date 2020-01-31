@@ -28,6 +28,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test SAP RFC connection type A configuration.
+     * @expectedException \phpsap\interfaces\exceptions\IConnectionFailedException
      */
     public function testConnectionConfigTypeA()
     {
@@ -54,16 +55,12 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         /**
          * Try to establish a connection, which should fail because of example.com.
          */
-        $exception = null;
-        try {
-            $saprfc->invoke();
-        } catch (IConnectionFailedException $exception) {
-        }
-        static::assertInstanceOf(IConnectionFailedException::class, $exception);
+        $saprfc->invoke();
     }
 
     /**
      * Test SAP RFC connection type B configuration.
+     * @expectedException \phpsap\interfaces\exceptions\IConnectionFailedException
      */
     public function testConnectionConfigTypeB()
     {
@@ -92,12 +89,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         /**
          * Try to establish a connection, which should fail because of example.com.
          */
-        $exception = null;
-        try {
-            $saprfc->invoke();
-        } catch (IConnectionFailedException $exception) {
-        }
-        static::assertInstanceOf(IConnectionFailedException::class, $exception);
+        $saprfc->invoke();
     }
 
     /**
