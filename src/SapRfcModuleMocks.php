@@ -85,7 +85,7 @@ class SapRfcModuleMocks extends Container
      * @throws \InvalidArgumentException The function name was no string or an empty
      *         string, or not in the list of templates.
      */
-    protected function validateId($name)
+    protected function validateId($name): string
     {
         $return = parent::validateId($name);
         if (!in_array($return, static::$validModuleFunctions, true)) {
