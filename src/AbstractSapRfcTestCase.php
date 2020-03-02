@@ -286,13 +286,21 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         static::assertArrayHasKey('RFCINT4', $test_out, 'Missing RFCINT4 in TEST_OUT!');
         static::assertSame(416639, $test_out['RFCINT4'], 'Test IN and OUT of RFCINT4 don\'t match!');
         /**
-         * Assert DateTime objects.
+         * Assert DateTime and DateInterval objects.
          */
         static::assertArrayHasKey('RFCTIME', $test_out, 'Missing RFCTIME in TEST_OUT!');
         static::assertArrayHasKey('RFCDATE', $test_out, 'Missing RFCDATE in TEST_OUT!');
-        static::assertInstanceOf(\DateTime::class, $test_out['RFCTIME'], 'Test OUT of RFCTIME is not DateTime!');
-        static::assertSame($testDateTime->format('H:i:s'), $test_out['RFCTIME']->format('H:i:s'));
-        static::assertInstanceOf(\DateTime::class, $test_out['RFCDATE'], 'Test OUT of RFCDATE is not DateTime!');
+        static::assertInstanceOf(
+            \DateInterval::class,
+            $test_out['RFCTIME'],
+            'Test OUT of RFCTIME is not DateInterval!'
+        );
+        static::assertSame($testDateTime->format('H:i:s'), $test_out['RFCTIME']->format('%H:%i:%s'));
+        static::assertInstanceOf(
+            \DateTime::class,
+            $test_out['RFCDATE'],
+            'Test OUT of RFCDATE is not DateTime!'
+        );
         static::assertSame($testDateTime->format('Y-m-d'), $test_out['RFCDATE']->format('Y-m-d'));
         /**
          * Assert hexadecimal value.
