@@ -1,6 +1,6 @@
 [
     {
-        "type": "array",
+        "type": "struct",
         "name": "TEST_OUT",
         "direction": "output",
         "optional": false,
@@ -56,7 +56,7 @@
         ]
     },
     {
-        "type": "array",
+        "type": "struct",
         "name": "TEST_IN",
         "direction": "input",
         "optional": false,
@@ -112,7 +112,7 @@
         ]
     },
     {
-        "type": "array",
+        "type": "table",
         "name": "DESTINATIONS",
         "direction": "table",
         "optional": false,
@@ -124,7 +124,7 @@
         ]
     },
     {
-        "type": "array",
+        "type": "table",
         "name": "LOG",
         "direction": "table",
         "optional": false,

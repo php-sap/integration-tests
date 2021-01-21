@@ -30,7 +30,7 @@
         "optional": true
     },
     {
-        "type": "array",
+        "type": "table",
         "name": "DATA",
         "direction": "table",
         "optional": false,
@@ -42,7 +42,7 @@
         ]
     },
     {
-        "type": "array",
+        "type": "table",
         "name": "FIELDS",
         "direction": "table",
         "optional": false,
@@ -70,7 +70,7 @@
         ]
     },
     {
-        "type": "array",
+        "type": "table",
         "name": "OPTIONS",
         "direction": "table",
         "optional": false,
