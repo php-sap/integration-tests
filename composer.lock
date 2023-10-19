@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab56db240a44213c412f44964293980a",
+    "content-hash": "2cad0ff3cfff32efb1fcbb16e177b890",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -78,27 +78,28 @@
         },
         {
             "name": "kba-team/memory-container",
-            "version": "v1.1.1",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/the-kbA-team/memory-container.git",
-                "reference": "8a371c9be67f883c8f61fee84d9877586f013583"
+                "reference": "9ebabfad03380fc3e415f7a784713b2b51680378"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/the-kbA-team/memory-container/zipball/8a371c9be67f883c8f61fee84d9877586f013583",
-                "reference": "8a371c9be67f883c8f61fee84d9877586f013583",
+                "url": "https://api.github.com/repos/the-kbA-team/memory-container/zipball/9ebabfad03380fc3e415f7a784713b2b51680378",
+                "reference": "9ebabfad03380fc3e415f7a784713b2b51680378",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0",
+                "php": ">=7.4",
                 "psr/container": "^1.0"
             },
             "provide": {
                 "psr/container-implementation": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8"
+                "phpunit/phpunit": "^9.6",
+                "squizlabs/php_codesniffer": "^3.7"
             },
             "type": "library",
             "autoload": {
@@ -119,9 +120,9 @@
             ],
             "support": {
                 "issues": "https://github.com/the-kbA-team/memory-container/issues",
-                "source": "https://github.com/the-kbA-team/memory-container/tree/v1.1.1"
+                "source": "https://github.com/the-kbA-team/memory-container/tree/v2.0.0"
             },
-            "time": "2020-11-11T09:07:09+00:00"
+            "time": "2023-10-19T15:00:37+00:00"
         },
         {
             "name": "myclabs/deep-copy",

@@ -16,7 +16,7 @@
     "php": ">=7.4",
     "ext-json": "*",
     "phpunit/phpunit": "^9.6",
-    "kba-team/memory-container": "^1.0",
+    "kba-team/memory-container": "^2.0",
     "php-sap/interfaces": "^3.0",
     "php-sap/common": "^4.0"
   },
