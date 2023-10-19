@@ -28,7 +28,6 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test SAP RFC connection type A configuration.
-     * @expectedException \phpsap\interfaces\exceptions\IConnectionFailedException
      */
     public function testConnectionConfigTypeA()
     {
@@ -55,12 +54,12 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         /**
          * Try to establish a connection, which should fail because of example.com.
          */
+        $this->expectException(\phpsap\interfaces\exceptions\IConnectionFailedException::class);
         $saprfc->invoke();
     }
 
     /**
      * Test SAP RFC connection type B configuration.
-     * @expectedException \phpsap\interfaces\exceptions\IConnectionFailedException
      */
     public function testConnectionConfigTypeB()
     {
@@ -89,6 +88,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         /**
          * Try to establish a connection, which should fail because of example.com.
          */
+        $this->expectException(\phpsap\interfaces\exceptions\IConnectionFailedException::class);
         $saprfc->invoke();
     }
 
@@ -185,13 +185,13 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
      * Test a failed connection attempt using either the module or its mockup.
      * @param \phpsap\interfaces\Config\IConfiguration $config
      * @dataProvider             provideIncompleteConfig
-     * @expectedException \phpsap\exceptions\IncompleteConfigException
      */
     public function testIncompleteConfig($config)
     {
         /**
          * Connection with empty configuration will be considered incomplete.
          */
+        $this->expectException(\phpsap\exceptions\IncompleteConfigException::class);
         static::newSapRfc('RFC_PING', null, $config, static::getApi('RFC_PING'))
             ->invoke();
     }
@@ -203,8 +203,6 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test invoking an unknown function an receiving an exception.
-     * @expectedException \phpsap\exceptions\UnknownFunctionException
-     * @expectedExceptionMessageRegExp "^Unknown function RFC_PINGG: .*"
      */
     public function testUnknownFunctionException()
     {
@@ -217,6 +215,8 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             //load a valid config
             $config = static::getActualSapConfig();
         }
+        $this->expectException(\phpsap\exceptions\UnknownFunctionException::class);
+        $this->expectExceptionMessage('Unknown function RFC_PINGG');
         static::newSapRfc('RFC_PINGG', null, $config)->invoke();
     }
 
@@ -267,7 +267,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             ])
             ->invoke();
         //assert basics
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('TEST_OUT', $result);
         //create a link for programmer's convenience ...
         $test_out = &$result['TEST_OUT'];
@@ -331,7 +331,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
          */
         static::assertArrayHasKey('LOG', $result);
         static::assertArrayHasKey(0, $result['LOG']);
-        static::assertInternalType('array', $result['LOG'][0]);
+        static::assertIsArray($result['LOG'][0]);
         static::assertArrayHasKey('RFCDEST', $result['LOG'][0]);
         static::assertSame('AOP3', $result['LOG'][0]['RFCDEST']);
     }
@@ -343,8 +343,6 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test a failed remote function call with parameters.
-     * @expectedException \phpsap\exceptions\FunctionCallException
-     * @expectedExceptionMessageRegExp "^Function call RFC_READ_TABLE failed: .*"
      */
     public function testFailedRemoteFunctionCallWithParameters()
     {
@@ -357,6 +355,8 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             //load a valid config
             $config = static::getActualSapConfig();
         }
+        $this->expectException(\phpsap\exceptions\FunctionCallException::class);
+        $this->expectExceptionMessage('Function call RFC_READ_TABLE failed');
         static::newSapRfc('RFC_READ_TABLE')
             ->setConfiguration($config)
             ->setParam('QUERY_TABLE', '&')
