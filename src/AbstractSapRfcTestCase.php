@@ -1,13 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpsap\IntegrationTests;
 
+use DateInterval;
+use DateTime;
 use phpsap\classes\Config\ConfigTypeA;
 use phpsap\classes\Config\ConfigTypeB;
 use phpsap\DateTime\SapDateTime;
+use phpsap\exceptions\FunctionCallException;
+use phpsap\exceptions\IncompleteConfigException;
+use phpsap\exceptions\UnknownFunctionException;
 use phpsap\interfaces\Config\IConfigTypeA;
 use phpsap\interfaces\Config\IConfigTypeB;
+use phpsap\interfaces\Config\IConfiguration;
 use phpsap\interfaces\exceptions\IConnectionFailedException;
+use phpsap\interfaces\exceptions\IFunctionCallException;
+use phpsap\interfaces\exceptions\IIncompleteConfigException;
+use phpsap\interfaces\exceptions\IInvalidArgumentException;
+use phpsap\interfaces\exceptions\IUnknownFunctionException;
 use phpsap\interfaces\IFunction;
 
 /**
@@ -28,8 +40,14 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test SAP RFC connection type A configuration.
+     * @return void
+     * @throws IConnectionFailedException
+     * @throws IFunctionCallException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      */
-    public function testConnectionConfigTypeA()
+    public function testConnectionConfigTypeA(): void
     {
         if (!extension_loaded(static::getModuleName())) {
             //load functions mocking SAP RFC module functions or class methods
@@ -54,14 +72,20 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         /**
          * Try to establish a connection, which should fail because of example.com.
          */
-        $this->expectException(\phpsap\interfaces\exceptions\IConnectionFailedException::class);
+        $this->expectException(IConnectionFailedException::class);
         $saprfc->invoke();
     }
 
     /**
      * Test SAP RFC connection type B configuration.
+     * @return void
+     * @throws IConnectionFailedException
+     * @throws IFunctionCallException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      */
-    public function testConnectionConfigTypeB()
+    public function testConnectionConfigTypeB(): void
     {
         if (!extension_loaded(static::getModuleName())) {
             //load functions mocking SAP RFC module functions or class methods
@@ -88,7 +112,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         /**
          * Try to establish a connection, which should fail because of example.com.
          */
-        $this->expectException(\phpsap\interfaces\exceptions\IConnectionFailedException::class);
+        $this->expectException(IConnectionFailedException::class);
         $saprfc->invoke();
     }
 
@@ -99,8 +123,14 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test a successful SAP remote function call to RFC_PING.
+     * @return void
+     * @throws IConnectionFailedException
+     * @throws IFunctionCallException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      */
-    public function testSuccessfulRfcPing()
+    public function testSuccessfulRfcPing(): void
     {
         if (!extension_loaded(static::getModuleName())) {
             //load functions mocking SAP RFC module functions or class methods
@@ -119,9 +149,9 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Data provider for incomplete configurations.
-     * @return array
+     * @return array<int, array<int, IConfiguration>>
      */
-    public static function provideIncompleteConfig()
+    public static function provideIncompleteConfig(): array
     {
         return [
             [new ConfigTypeA()],
@@ -182,15 +212,21 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test a failed connection attempt using either the module or its mockup.
-     * @param \phpsap\interfaces\Config\IConfiguration $config
-     * @dataProvider             provideIncompleteConfig
+     * @param  IConfiguration  $config
+     * @return void
+     * @throws IConnectionFailedException
+     * @throws IFunctionCallException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
+     * @dataProvider provideIncompleteConfig
      */
-    public function testIncompleteConfig($config)
+    public function testIncompleteConfig(IConfiguration $config): void
     {
         /**
          * Connection with empty configuration will be considered incomplete.
          */
-        $this->expectException(\phpsap\exceptions\IncompleteConfigException::class);
+        $this->expectException(IncompleteConfigException::class);
         static::newSapRfc('RFC_PING', null, $config, static::getApi('RFC_PING'))
             ->invoke();
     }
@@ -201,9 +237,15 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
     abstract protected function mockUnknownFunctionException();
 
     /**
-     * Test invoking an unknown function an receiving an exception.
+     * Test invoking an unknown function and receiving an exception.
+     * @return void
+     * @throws IConnectionFailedException
+     * @throws IFunctionCallException
+     * @throws IIncompleteConfigException
+     * @throws IInvalidArgumentException
+     * @throws IUnknownFunctionException
      */
-    public function testUnknownFunctionException()
+    public function testUnknownFunctionException(): void
     {
         if (!extension_loaded(static::getModuleName())) {
             //load functions mocking SAP RFC module functions or class methods
@@ -214,7 +256,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             //load a valid config
             $config = static::getActualSapConfig();
         }
-        $this->expectException(\phpsap\exceptions\UnknownFunctionException::class);
+        $this->expectException(UnknownFunctionException::class);
         $this->expectExceptionMessage('Unknown function RFC_PINGG');
         static::newSapRfc('RFC_PINGG', null, $config)->invoke();
     }
@@ -227,8 +269,10 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test successful SAP remote function call with parameters and results.
+     * @return void
+     * @throws IInvalidArgumentException
      */
-    public function testRemoteFunctionCallWithParametersAndResults()
+    public function testRemoteFunctionCallWithParametersAndResults(): void
     {
         if (!extension_loaded(static::getModuleName())) {
             //load functions mocking SAP RFC module functions or class methods
@@ -240,7 +284,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             $config = static::getActualSapConfig();
         }
         //prepare a DateTime object for testing SAP date and time.
-        $testDateTime = new \DateTime('2019-10-30 10:20:30');
+        $testDateTime = new DateTime('2019-10-30 10:20:30');
         //prepare function call parameter
         $test_in = [
             'RFCFLOAT' => 70.11,
@@ -290,13 +334,13 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         static::assertArrayHasKey('RFCTIME', $test_out, 'Missing RFCTIME in TEST_OUT!');
         static::assertArrayHasKey('RFCDATE', $test_out, 'Missing RFCDATE in TEST_OUT!');
         static::assertInstanceOf(
-            \DateInterval::class,
+            DateInterval::class,
             $test_out['RFCTIME'],
             'Test OUT of RFCTIME is not DateInterval!'
         );
         static::assertSame($testDateTime->format('H:i:s'), $test_out['RFCTIME']->format('%H:%i:%s'));
         static::assertInstanceOf(
-            \DateTime::class,
+            DateTime::class,
             $test_out['RFCDATE'],
             'Test OUT of RFCDATE is not DateTime!'
         );
@@ -342,8 +386,10 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
 
     /**
      * Test a failed remote function call with parameters.
+     * @return void
+     * @throws IInvalidArgumentException
      */
-    public function testFailedRemoteFunctionCallWithParameters()
+    public function testFailedRemoteFunctionCallWithParameters(): void
     {
         if (!extension_loaded(static::getModuleName())) {
             //load functions mocking SAP RFC module functions or class methods
@@ -354,7 +400,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             //load a valid config
             $config = static::getActualSapConfig();
         }
-        $this->expectException(\phpsap\exceptions\FunctionCallException::class);
+        $this->expectException(FunctionCallException::class);
         $this->expectExceptionMessage('Function call RFC_READ_TABLE failed');
         static::newSapRfc('RFC_READ_TABLE')
             ->setConfiguration($config)
