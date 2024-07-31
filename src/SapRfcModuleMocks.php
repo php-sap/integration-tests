@@ -1,18 +1,13 @@
 <?php
 
-/**
- * File src/SapRfcModuleMocks.php
- *
- * Container holding mock logic for the SAP RFC module.
- *
- * @package integration-tests
- * @author  Gregor J.
- * @license MIT
- */
+declare(strict_types=1);
 
 namespace phpsap\IntegrationTests;
 
+use Closure;
+use InvalidArgumentException;
 use kbATeam\MemoryContainer\Container;
+use RuntimeException;
 
 /**
  * Class \phpsap\IntegrationTests\SapRfcModuleMocks
@@ -28,22 +23,22 @@ class SapRfcModuleMocks extends Container
     /**
      * @var array Valid SAP RFC module function or class method names.
      */
-    private static $validModuleFunctions = [];
+    private static array $validModuleFunctions = [];
 
     /**
      * @var string Path to file that will get required once.
      */
-    private static $requireFile;
+    private static string $requireFile;
 
     /**
      * Set the file to require.
-     * @param string $file
-     * @throws \RuntimeException
+     * @param  string  $file
+     * @throws RuntimeException
      */
-    public static function requireFile($file)
+    public static function requireFile(string $file): void
     {
         if (!file_exists($file)) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Required file %s not found!',
                 $file
             ));
@@ -53,44 +48,36 @@ class SapRfcModuleMocks extends Container
 
     /**
      * Set an array of valid function names.
-     * @param array $moduleFunctions
+     * @param  array  $moduleFunctions
      */
-    public static function validModuleFunctions($moduleFunctions)
+    public static function validModuleFunctions(array $moduleFunctions): void
     {
-        if (!is_array($moduleFunctions)) {
-            throw new \RuntimeException(
-                'Expected array of valid function names.'
-            );
-        }
         static::$validModuleFunctions = $moduleFunctions;
     }
 
     /**
      * Mock a SAP RFC module specific function or method.
-     * @param string $name
-     * @param \Closure $logic
+     * @param  string  $name
+     * @param  Closure  $logic
      */
-    public function mock($name, $logic)
+    public function mock(string $name, Closure $logic): void
     {
         $nameValid = $this->validateId($name);
-        if (!is_object($logic) && ! $logic instanceof \Closure) {
-            throw new \InvalidArgumentException('Expect function to be closure!');
-        }
         $this->set($nameValid, $logic);
     }
 
     /**
      * Validate an ID for the other methods.
-     * @param  mixed  $name  The function name to validate.
+     * @param  string  $id  The function name to validate.
      * @return string
-     * @throws \InvalidArgumentException The function name was no string or an empty
+     * @throws InvalidArgumentException The function name was no string or an empty
      *         string, or not in the list of templates.
      */
-    protected function validateId($name): string
+    protected function validateId(string $id): string
     {
-        $return = parent::validateId($name);
+        $return = parent::validateId($id);
         if (!in_array($return, static::$validModuleFunctions, true)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 '%s function not defined in template.',
                 $return
             ));
@@ -106,7 +93,7 @@ class SapRfcModuleMocks extends Container
     public function __construct()
     {
         if (static::$requireFile === null) {
-            throw new \RuntimeException('No module logic template file defined!');
+            throw new RuntimeException('No module logic template file defined!');
         }
         require_once static::$requireFile;
     }
