@@ -134,7 +134,7 @@ abstract class AbstractTestCase extends TestCase
     public static function newSapRfc(string $name, array $params = null, IConfiguration $config = null, IApi $api = null): IFunction
     {
         $class = static::getClassName();
-        return new $class($name, $params, $config, $api);
+        return $class::create($name, $params, $config, $api);
     }
 
     /**
