@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2064ea1f411c3025129981495f22ad5f",
+    "content-hash": "2b1555289289b3205cbfbcdd2efb4465",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -362,29 +362,28 @@
         },
         {
             "name": "php-sap/common",
-            "version": "dev-main",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/common.git",
-                "reference": "490cfb015a307b70eee00902e9870c410e536383"
+                "reference": "85ea659659f9569246c778e082935ad813b1866f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-sap/common/zipball/490cfb015a307b70eee00902e9870c410e536383",
-                "reference": "490cfb015a307b70eee00902e9870c410e536383",
+                "url": "https://api.github.com/repos/php-sap/common/zipball/85ea659659f9569246c778e082935ad813b1866f",
+                "reference": "85ea659659f9569246c778e082935ad813b1866f",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": "^8.1",
                 "php-sap/datetime": "^1.5",
-                "php-sap/interfaces": "dev-main"
+                "php-sap/interfaces": "^5.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.0",
                 "squizlabs/php_codesniffer": "^3.7"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -411,9 +410,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-sap/common/issues",
-                "source": "https://github.com/php-sap/common/tree/main"
+                "source": "https://github.com/php-sap/common/tree/v6.0.0"
             },
-            "time": "2024-07-31T13:30:11+00:00"
+            "time": "2024-08-05T11:02:59+00:00"
         },
         {
             "name": "php-sap/datetime",
@@ -472,7 +471,7 @@
         },
         {
             "name": "php-sap/interfaces",
-            "version": "dev-main",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-sap/interfaces.git",
@@ -494,7 +493,6 @@
             "require-dev": {
                 "squizlabs/php_codesniffer": "^3.7"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -521,7 +519,7 @@
             ],
             "support": {
                 "issues": "https://github.com/php-sap/interfaces/issues",
-                "source": "https://github.com/php-sap/interfaces/tree/main"
+                "source": "https://github.com/php-sap/interfaces/tree/v5.0.0"
             },
             "time": "2024-07-30T12:11:01+00:00"
         },
@@ -2093,10 +2091,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "php-sap/interfaces": 20,
-        "php-sap/common": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
