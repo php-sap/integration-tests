@@ -1,64 +1,72 @@
-# Controls when the action will run.
+name: "CI"
+
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
   pull_request:
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
   contents: "read"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+concurrency:
+  group: "ci-${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
 jobs:
-  # composer validation
   composer:
     name: "composer config validation"
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
     steps:
-      - uses: "actions/checkout@v3"
+      - name: "git checkout"
+        uses: "actions/checkout@v7"
+        with:
+          persist-credentials: false
       - name: "Validate composer.json"
         run: "composer validate --strict"
-  # PHP lint and PHPStan for different PHP versions
+
   php:
+    name: "PHP ${{ matrix.php-version }} (${{ matrix.dependencies }}) - lint, PHPStan, PHPCS"
+    needs: "composer"
     runs-on: "ubuntu-latest"
+    timeout-minutes: 15
     strategy:
+      fail-fast: false
       matrix:
         php-version:
           - "8.1"
           - "8.2"
           - "8.3"
-    name: "PHP ${{ matrix.php-version }}"
+        dependencies:
+          - "locked"
+        include:
+          - php-version: "8.1"
+            dependencies: "lowest"
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v7"
+        with:
+          persist-credentials: false
       - name: "setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "${{ matrix.php-version }}"
-          coverage: "xdebug"
+          extensions: "json"
+          tools: "composer:v2"
+      - name: "install composer dependencies (locked)"
+        if: "matrix.dependencies == 'locked'"
+        run: "composer install --prefer-dist --no-interaction --no-progress"
+      - name: "install composer dependencies (lowest)"
+        if: "matrix.dependencies == 'lowest'"
+        run: "composer update --prefer-lowest --prefer-dist --no-interaction --no-progress"
+      - name: "audit dependencies for known security vulnerabilities"
+        if: "matrix.php-version == '8.1'"
+        run: "composer audit"
       - name: "check PHP version"
         run: "php -v"
       - name: "lint PHP files"
-        run: "php -l src/"
-#      - name: "install composer dependencies"
-#        run: "composer install --prefer-dist --no-progress"
-#      # PHPStan
-#      - name: "PHPStan static analysis"
-#        uses: "php-actions/phpstan@v3"
-#        with:
-#          php_version: "${{ matrix.php-version }}"
-#          configuration: "phpstan.neon"
-#          path: "exceptions/ src/ tests/"
-  codesniffer:
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: "git checkout"
-        uses: "actions/checkout@v3"
-      - name: "Install PHP_CodeSniffer"
-        run: "curl -OLf https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar"
-      - name: "check PHP_CodeSniffer version"
-        run: "php phpcs.phar --version"
-      - name: "PHP CodeSniffer"
-        run: "php phpcs.phar"
+        run: "find src -type f -name '*.php' -print0 | xargs -0 -n1 php -l"
+      - name: "run PHPStan"
+        run: "php vendor/bin/phpstan analyse --no-progress"
+      - name: "run PHPCS"
+        run: "php vendor/bin/phpcs"
