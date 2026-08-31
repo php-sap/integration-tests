@@ -36,7 +36,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
     /**
      * Mock the SAP RFC module for a failed connection attempt.
      */
-    abstract protected function mockConnectionFailed();
+    abstract protected function mockConnectionFailed(): void;
 
     /**
      * Test SAP RFC connection type A configuration.
@@ -67,7 +67,9 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         static::assertSame('001', $cfg->getSysnr());
         static::assertSame('002', $cfg->getClient());
         //Set a clearly non-existing hostname to cause a connection failure.
-        $saprfc->getConfiguration()->setAshost('prod.sap.example.com');
+        /** @var IConfigTypeA $config */
+        $config = $cfg;
+        $config->setAshost('prod.sap.example.com');
         static::assertSame('prod.sap.example.com', $cfg->getAshost());
         /**
          * Try to establish a connection, which should fail because of example.com.
@@ -107,7 +109,9 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         static::assertSame('msg.sap.example.com', $cfg->getMshost());
         static::assertSame('grp01', $cfg->getGroup());
         static::assertSame('003', $cfg->getClient());
-        $saprfc->getConfiguration()->setMshost('grp01msg.sap.example.com');
+        /** @var IConfigTypeB $config */
+        $config = $cfg;
+        $config->setMshost('grp01msg.sap.example.com');
         static::assertSame('grp01msg.sap.example.com', $cfg->getMshost());
         /**
          * Try to establish a connection, which should fail because of example.com.
@@ -119,7 +123,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
     /**
      * Mock the SAP RFC module for a successful connection attempt.
      */
-    abstract protected function mockSuccessfulRfcPing();
+    abstract protected function mockSuccessfulRfcPing(): void;
 
     /**
      * Test a successful SAP remote function call to RFC_PING.
@@ -234,7 +238,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
     /**
      * Mock the SAP RFC module for an unknown function call exception.
      */
-    abstract protected function mockUnknownFunctionException();
+    abstract protected function mockUnknownFunctionException(): void;
 
     /**
      * Test invoking an unknown function and receiving an exception.
@@ -265,7 +269,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
      * Mock the SAP RFC module for a successful SAP remote function call with
      * parameters and results.
      */
-    abstract protected function mockRemoteFunctionCallWithParametersAndResults();
+    abstract protected function mockRemoteFunctionCallWithParametersAndResults(): void;
 
     /**
      * Test successful SAP remote function call with parameters and results.
@@ -301,10 +305,12 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
             'RFCDATA2' => 'xi82ph2zJ8BCVtlR'
         ];
         //remote function call
-        $result = static::newSapRfc('RFC_WALK_THRU_TEST')
-            ->setConfiguration($config)
-            ->setApi(static::getApi('RFC_WALK_THRU_TEST'))
-            ->setParam('TEST_IN', $test_in)
+        /** @var IFunction $rfcCall */
+        $rfcCall = static::newSapRfc('RFC_WALK_THRU_TEST');
+        $rfcCall = $rfcCall->setConfiguration($config);
+        $rfcCall = $rfcCall->setApi(static::getApi('RFC_WALK_THRU_TEST'));
+        $result = $rfcCall
+            ->setParam('TEST_IN', $test_in) // @phpstan-ignore-line
             ->setParam('DESTINATIONS', [
                 ['RFCDEST' => 'AOP3']
             ])
@@ -382,7 +388,7 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
     /**
      * Mock the SAP RFC module for a failed SAP remote function call with parameters.
      */
-    abstract protected function mockFailedRemoteFunctionCallWithParameters();
+    abstract protected function mockFailedRemoteFunctionCallWithParameters(): void;
 
     /**
      * Test a failed remote function call with parameters.
@@ -402,9 +408,11 @@ abstract class AbstractSapRfcTestCase extends AbstractTestCase
         }
         $this->expectException(FunctionCallException::class);
         $this->expectExceptionMessage('Function call RFC_READ_TABLE failed');
-        static::newSapRfc('RFC_READ_TABLE')
-            ->setConfiguration($config)
-            ->setParam('QUERY_TABLE', '&')
+        /** @var IFunction $rfcCall */
+        $rfcCall = static::newSapRfc('RFC_READ_TABLE');
+        $rfcCall = $rfcCall->setConfiguration($config);
+        $rfcCall
+            ->setParam('QUERY_TABLE', '&') // @phpstan-ignore-line
             ->invoke();
     }
 }

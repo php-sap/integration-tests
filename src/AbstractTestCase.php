@@ -27,7 +27,7 @@ use RuntimeException;
 abstract class AbstractTestCase extends TestCase
 {
     /**
-     * @var array A sample PHP/SAP configuration.
+     * @var array<string, string> A sample PHP/SAP configuration.
      */
     protected static array $sampleSapConfig = [
         'ashost' => 'sap.example.com',
@@ -40,7 +40,7 @@ abstract class AbstractTestCase extends TestCase
     /**
      * AbstractTestCase constructor.
      * @param string|null  $name
-     * @param array        $data
+     * @param array<string, mixed>  $data
      * @param string       $dataName
      */
     public function __construct(?string $name = null, array $data = [], $dataName = '')
@@ -125,7 +125,7 @@ abstract class AbstractTestCase extends TestCase
      * queried on the fly by connecting to the SAP remote system. In order to
      * connect to the SAP remote system, you need a connection configuration.
      * @param  string  $name   SAP remote function name.
-     * @param array|null           $params SAP remote function call parameters. Default: null
+     * @param array<string, mixed>|null           $params SAP remote function call parameters. Default: null
      * @param  IConfiguration|null $config Connection configuration. Default: null
      * @param  IApi|null           $api    SAP remote function call API. Default: null
      * @return IFunction
@@ -144,7 +144,9 @@ abstract class AbstractTestCase extends TestCase
      */
     public static function mock(string $name, Closure $logic): void
     {
-        SapRfcModuleMocks::singleton()->mock($name, $logic);
+        /** @var SapRfcModuleMocks $instance */
+        $instance = SapRfcModuleMocks::singleton();
+        $instance->mock($name, $logic);
     }
 
     /**
@@ -179,7 +181,7 @@ abstract class AbstractTestCase extends TestCase
 
     /**
      * Get an array of valid SAP RFC module function or class method names.
-     * @return array
+     * @return array<int, string>
      */
     abstract public static function getValidModuleFunctions(): array;
 }

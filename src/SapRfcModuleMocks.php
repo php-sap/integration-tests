@@ -21,14 +21,14 @@ use RuntimeException;
 class SapRfcModuleMocks extends Container
 {
     /**
-     * @var array Valid SAP RFC module function or class method names.
+     * @var array<int, string> Valid SAP RFC module function or class method names.
      */
-    private static array $validModuleFunctions = [];
+    protected static array $validModuleFunctions = [];
 
     /**
      * @var string Path to file that will get required once.
      */
-    private static string $requireFile;
+    protected static string $requireFile;
 
     /**
      * Set the file to require.
@@ -48,7 +48,7 @@ class SapRfcModuleMocks extends Container
 
     /**
      * Set an array of valid function names.
-     * @param  array  $moduleFunctions
+     * @param  array<int, string>  $moduleFunctions
      */
     public static function validModuleFunctions(array $moduleFunctions): void
     {
@@ -92,7 +92,7 @@ class SapRfcModuleMocks extends Container
      */
     public function __construct()
     {
-        if (static::$requireFile === null) {
+        if (!isset(static::$requireFile)) {
             throw new RuntimeException('No module logic template file defined!');
         }
         require_once static::$requireFile;
