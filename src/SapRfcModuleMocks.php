@@ -6,19 +6,18 @@ namespace phpsap\IntegrationTests;
 
 use Closure;
 use InvalidArgumentException;
-use kbATeam\MemoryContainer\Container;
 use RuntimeException;
 
 /**
  * Class \phpsap\IntegrationTests\SapRfcModuleMocks
  *
- * Container holding mock logic for the SAP RFC module.
+ * In-memory registry holding mock logic for the SAP RFC module.
  *
  * @package phpsap\IntegrationTests
  * @author  Gregor J.
  * @license MIT
  */
-class SapRfcModuleMocks extends Container
+class SapRfcModuleMocks
 {
     /**
      * @var array<int, string> Valid SAP RFC module function or class method names.
@@ -29,6 +28,11 @@ class SapRfcModuleMocks extends Container
      * @var string Path to file that will get required once.
      */
     protected static string $requireFile;
+
+    /**
+     * @var array<string, Closure> In-memory storage of mocked logic.
+     */
+    private array $storage = [];
 
     /**
      * Set the file to require.
@@ -62,8 +66,24 @@ class SapRfcModuleMocks extends Container
      */
     public function mock(string $name, Closure $logic): void
     {
+        $this->storage[$this->validateId($name)] = $logic;
+    }
+
+    /**
+     * Retrieve the mocked logic for a SAP RFC module specific function or method.
+     * @param  string  $name
+     * @return Closure
+     * @throws InvalidArgumentException The function name was no string or an empty
+     *         string, or not in the list of templates.
+     * @throws RuntimeException No mock has been registered for this name.
+     */
+    public function get(string $name): Closure
+    {
         $nameValid = $this->validateId($name);
-        $this->set($nameValid, $logic);
+        if (!array_key_exists($nameValid, $this->storage)) {
+            throw new RuntimeException(sprintf('%s not found', $nameValid));
+        }
+        return $this->storage[$nameValid];
     }
 
     /**
@@ -75,8 +95,8 @@ class SapRfcModuleMocks extends Container
      */
     protected function validateId(string $id): string
     {
-        $return = parent::validateId($id);
-        if (!in_array($return, static::$validModuleFunctions, true)) {
+        $return = trim($id);
+        if ($return === '' || !in_array($return, static::$validModuleFunctions, true)) {
             throw new InvalidArgumentException(sprintf(
                 '%s function not defined in template.',
                 $return
@@ -96,5 +116,18 @@ class SapRfcModuleMocks extends Container
             throw new RuntimeException('No module logic template file defined!');
         }
         require_once static::$requireFile;
+    }
+
+    /**
+     * Always returns the same instance for the duration of the process.
+     * @return self
+     */
+    public static function singleton(): self
+    {
+        static $instance = null;
+        if ($instance === null) {
+            $instance = new self();
+        }
+        return $instance;
     }
 }
