@@ -1,7 +1,7 @@
 *               text eol=lf
-.github			export-ignore
+.github         export-ignore
 .gitattributes  export-ignore
 .gitignore      export-ignore
-.phpcs.xml		export-ignore
+phpcs.xml       export-ignore
 composer.*      export-ignore
 README.md       export-ignore
