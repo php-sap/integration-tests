@@ -49,49 +49,47 @@ about a specific extension's behavior belong in the connector repo consuming it 
 
 ## Developer Workflows
 
-All commands run inside official PHP Docker images so the host machine does not need a
-local PHP installation. Use PHP 8.1, 8.2, and 8.3 (matching the CI matrix in
-`.github/workflows/main.yml`) for anything version-sensitive (PHPStan, PHP lint).
-If you are behind a proxy, forward `HTTP_PROXY`/`HTTPS_PROXY`/`NO_PROXY` into the
-container whenever the command needs network access (e.g. `composer install`).
+All commands run through the `Makefile` via Docker, so the host machine does not need a
+local PHP installation. Run `make help` for the full target list. Use PHP 8.1, 8.2, and
+8.3 (matching the CI matrix in `.github/workflows/main.yml`) for anything
+version-sensitive (PHPStan, PHP lint). If you are behind a proxy, `install` and `audit`
+already forward `HTTP_PROXY`/`HTTPS_PROXY`/`NO_PROXY`; pass `CA_CERT_FILE=/path/to/ca.pem`
+to trust a corporate proxy root CA inside the container.
 
 ```bash
-# Install/update dependencies (needs network access -> forward proxy settings)
-docker run --rm --init --interactive --tty \
-  --user "$(id -u)":"$(id -g)" \
-  --env HTTP_PROXY --env HTTPS_PROXY --env NO_PROXY \
-  --volume "$(pwd)":/app --workdir /app \
-  composer:2 install
+# Install/update dependencies for a given PHP version (set DEPENDENCIES_LOWEST=1 for
+# --prefer-lowest, matching the CI "lowest" matrix job)
+make install PHP_VERSION=8.1
 
-# Run commands from the repository root. PHPUnit is installed (vendor/bin/phpunit), but
-# running it here without a target only shows usage: this package ships reusable abstract
-# tests, not a local suite (no network access needed)
-docker run --rm --init \
-  --user "$(id -u)":"$(id -g)" \
-  --volume "$(pwd)":/app --workdir /app \
-  php:8.1-cli php vendor/bin/phpunit
+# Syntax-check every .php file in src/, matches CI
+make lint PHP_VERSION=8.1
 
-# Fix code style (run first, uses phpcs.xml, PSR-12 for src/; no network access needed)
-docker run --rm --init \
-  --user "$(id -u)":"$(id -g)" \
-  --volume "$(pwd)":/app --workdir /app \
-  php:8.1-cli php vendor/bin/phpcbf
+# Run PHPStan
+make analyze PHP_VERSION=8.1
 
-# Check remaining style issues (no network access needed)
-docker run --rm --init \
-  --user "$(id -u)":"$(id -g)" \
-  --volume "$(pwd)":/app --workdir /app \
-  php:8.1-cli php vendor/bin/phpcs
+# Auto-fix code style (run this before "sniff")
+make beautify PHP_VERSION=8.1
 
-# Run static analysis for every supported PHP version (no network access needed;
-# --memory-limit=-1 works around the image's low default memory_limit)
-for PHP_VERSION in 8.1 8.2 8.3; do
-  docker run --rm --init \
-    --user "$(id -u)":"$(id -g)" \
-    --volume "$(pwd)":/app --workdir /app \
-    "php:${PHP_VERSION}-cli" php vendor/bin/phpstan analyse --no-progress --memory-limit=-1
-done
+# Check code style (uses phpcs.xml, PSR-12 for src/)
+make sniff PHP_VERSION=8.1
+
+# Check dependencies for known vulnerabilities
+make audit
+
+# Run composer validate --strict
+make validate
 ```
+
+There is no `test` Makefile target: PHPUnit is installed (`vendor/bin/phpunit`), but
+running it here without a target only shows usage, since this package ships reusable
+abstract tests, not a local suite. Consumer repositories run the tests via their own
+`make test`.
+
+**Always use these Makefile targets instead of inventing ad-hoc `docker run`/`composer`/
+`php` commands.** If a task needs something the Makefile doesn't expose directly (e.g.
+PHPCS on a single file), take the exact `docker run` invocation from the matching
+Makefile target (image, `DOCKER_USER`, `DOCKER_MOUNT`, env forwarding) and only append
+the extra arguments — don't build the command from scratch.
 
 PHPStan runs at **level 9** (`phpstan.neon`, scans `src/`).
 
@@ -110,3 +108,6 @@ PHPStan runs at **level 9** (`phpstan.neon`, scans `src/`).
 - Before changing a mock name or module template expectation, trace all related abstract methods and the `SapRfcModuleMocks::validateId()` path.
 - Before changing JSON fixtures, inspect the matching assertions in `AbstractSapRfcTestCase.php` so types still align with expected PHP values (`DateTime`, `DateInterval`, arrays, decoded hex values).
 - Write documentation, comments, and new code in English to match the repository style.
+- Always run QA/build commands through the `Makefile` targets, not self-invented `docker run`
+  commands. For one-off variants (a single file), base the invocation on the relevant
+  Makefile target and only append the extra arguments.
